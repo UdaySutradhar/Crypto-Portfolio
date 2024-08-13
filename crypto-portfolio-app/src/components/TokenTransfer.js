@@ -1,6 +1,6 @@
 // src/components/TokenTransfer.js
 import { useState } from 'react';
-import { Web3Provider, Contract, utils } from 'ethers';
+import { ethers } from 'ethers';
 
 function TokenTransfer({ walletAddress }) {
   const [recipient, setRecipient] = useState('');
@@ -12,13 +12,13 @@ function TokenTransfer({ walletAddress }) {
       alert('Please connect your wallet first!');
       return;
     }
-    const provider = new Web3Provider(window.ethereum);
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const contract = new Contract(tokenAddress, [
+    const contract = new ethers.Contract(tokenAddress, [
       "function transfer(address to, uint amount) returns (bool)"
     ], signer);
 
-    const tx = await contract.transfer(recipient, utils.parseUnits(amount, 18));
+    const tx = await contract.transfer(recipient, ethers.utils.parseUnits(amount, 18));
     await tx.wait();
     alert('Transfer successful!');
   };
