@@ -1,6 +1,6 @@
 // src/components/WatchList.js
 import { useState } from 'react';
-import { ethers } from 'ethers';
+import { Web3Provider, Contract, utils } from 'ethers';
 
 function WatchList({ walletAddress, setSelectedTokenId }) {
   const [tokens, setTokens] = useState([]);
@@ -11,12 +11,12 @@ function WatchList({ walletAddress, setSelectedTokenId }) {
       alert('Please connect your wallet first!');
       return;
     }
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const contract = new ethers.Contract(tokenAddress, [
+    const provider = new Web3Provider(window.ethereum);
+    const contract = new Contract(tokenAddress, [
       "function balanceOf(address) view returns (uint256)"
     ], provider);
     const balance = await contract.balanceOf(walletAddress);
-    setTokens([...tokens, { address: tokenAddress, balance: ethers.utils.formatUnits(balance, 18) }]);
+    setTokens([...tokens, { address: tokenAddress, balance: utils.formatUnits(balance, 18) }]);
     setSelectedTokenId(tokenAddress); // Optionally set the selected token
   };
 

@@ -1,11 +1,11 @@
 // src/components/WalletConnector.js
 import { useState } from 'react';
-import { ethers } from 'ethers';
+import { Web3Provider } from 'ethers';
 
 function WalletConnector({ setWalletAddress }) {
   const connectWallet = async () => {
     if (window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = new Web3Provider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
       setWalletAddress(await signer.getAddress());
