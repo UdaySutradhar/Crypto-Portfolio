@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto-Portfolio App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 0;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            margin: 20px 0;
+        }
+        nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            margin: 40px 0;
+        }
+        .content h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .content p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>Crypto-Portfolio App</h1>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <a href="#wallet-connection">Wallet Connection</a>
+            <a href="#watch-list">Watch List</a>
+            <a href="#historical-data">Historical Data</a>
+            <a href="#token-transfer">Token Transfer</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <h2>Welcome to the Crypto-Portfolio App</h2>
+            <p>This single-page application (SPA) allows you to manage and monitor your cryptocurrency portfolio with ease. Whether you want to track your token balances, view historical data, or transfer tokens, this app provides all the tools you need.</p>
+
+            <h3 id="wallet-connection">Wallet Connection</h3>
+            <p>Connect your MetaMask wallet to access and manage your tokens. This secure integration ensures that your assets remain safe while providing you with real-time data.</p>
+
+            <h3 id="watch-list">Watch List</h3>
+            <p>Add your favorite tokens to a personalized watch list. Stay updated with current balances and keep an eye on market trends.</p>
+
+            <h3 id="historical-data">Historical Data</h3>
+            <p>View historical token balances to analyze past performance. Use the date picker to select specific time periods and gain insights into your investments.</p>
+
+            <h3 id="token-transfer">Token Transfer</h3>
+            <p>Seamlessly transfer tokens to other wallets. Enter the recipient’s address, token contract address, and the amount to execute transactions directly from the app.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Crypto-Portfolio App. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
