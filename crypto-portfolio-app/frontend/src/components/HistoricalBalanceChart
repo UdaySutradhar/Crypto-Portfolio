@@ -1,0 +1,33 @@
+import React from 'react';
+import { Line } from 'react-chartjs-2';
+
+function HistoricalBalanceChart({ historicalData }) {
+    const data = {
+        labels: historicalData.dates,
+        datasets: [
+            {
+                label: 'Token Balance',
+                data: historicalData.balances,
+                fill: false,
+                backgroundColor: 'rgba(75,192,192,1)',
+                borderColor: 'rgba(75,192,192,1)',
+            },
+        ],
+    };
+
+    const options = {
+        scales: {
+            y: {
+                beginAtZero: true,
+            },
+        },
+    };
+
+    return (
+        <div className="chart-container">
+            <Line data={data} options={options} />
+        </div>
+    );
+}
+
+export default HistoricalBalanceChart;

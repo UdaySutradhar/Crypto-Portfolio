@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
+import React, { useEffect, useState } from 'react';
+import HistoricalBalanceChart from './HistoricalBalanceChart';
 
-const HistoricalBalance = ({ fetchHistoricalBalance, tokenAddress, walletAddress }) => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [balance, setBalance] = useState(null);
+function HistoricalBalance({ fetchHistoricalBalance, tokenAddress, walletAddress }) {
+    const [historicalData, setHistoricalData] = useState({ dates: [], balances: [] });
 
-  const handleDateChange = async (date) => {
-    setStartDate(date);
-    const balance = await fetchHistoricalBalance(walletAddress, tokenAddress, date);
-    setBalance(balance);
-  };
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await fetchHistoricalBalance(walletAddress, tokenAddress);
+            setHistoricalData(data);
+        };
+        fetchData();
+    }, [walletAddress, tokenAddress]);
 
-  return (
-    <div>
-      <DatePicker selected={startDate} onChange={(date) => handleDateChange(date)} />
-      {balance !== null && <p>Balance on {startDate.toDateString()}: {balance}</p>}
-    </div>
-  );
-};
+    return (
+        <div>
+            <h2>Historical Balance for {tokenAddress}</h2>
+            <HistoricalBalanceChart historicalData={historicalData} />
+        </div>
+    );
+}
 
 export default HistoricalBalance;
