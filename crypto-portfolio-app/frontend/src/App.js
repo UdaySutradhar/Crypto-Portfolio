@@ -6,6 +6,7 @@ import Token from './components/Token';
 import HistoricalBalance from './components/HistoricalBalance';
 import AllowanceChecker from './components/AllowanceChecker';
 import './App.css';
+import TokenChart from './components/TokenChart';
 
 function App() {
   const [walletAddress, setWalletAddress] = useState("");
@@ -17,6 +18,11 @@ function App() {
 
   const removeToken = (tokenAddress) => {
     setTokens(tokens.filter(token => token.address !== tokenAddress));
+  };
+
+  const historicalData = {
+    dates: ['2024-08-01', '2024-08-02', '2024-08-03'],
+    balances: [1.5, 1.7, 2.0],
   };
 
   // Fetch Historical Balance
@@ -52,6 +58,11 @@ function App() {
           ))}
           <AddTokenForm addToken={addToken} />
 
+          <div className="App">
+      {/* Other components */}
+      <TokenChart data={historicalData} />
+    </div>
+
           <h2>Historical Balance</h2>
           {tokens.map((token, index) => (
             <HistoricalBalance 
@@ -74,6 +85,7 @@ function App() {
         </div>
       )}
     </div>
+    
   );
 }
 
