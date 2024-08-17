@@ -1,4 +1,3 @@
-// src/components/WalletConnect.js
 import React, { useState } from 'react';
 import { ethers } from 'ethers';
 
@@ -14,12 +13,12 @@ function WalletConnect() {
                 const signer = provider.getSigner();
                 const address = await signer.getAddress();
                 setAccount(address);
-                setError(null); // Clear any previous errors
+                setError(null);
             } else {
                 setError('No wallet detected. Please install Metamask.');
             }
-        } catch (err) {
-            setError('Error connecting wallet: ' + err.message);
+        } catch (error) {
+            setError('Error connecting wallet: ' + error.message);
         }
     };
 
