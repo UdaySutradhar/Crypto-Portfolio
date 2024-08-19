@@ -1,67 +1,64 @@
 import React, { useState } from 'react';
 import { ethers } from 'ethers';
+import { Button, TextField, Typography } from '@mui/material';
 
-function Transfer() {
-  const [recipientAddress, setRecipientAddress] = useState('');
-  const [tokenAddress, setTokenAddress] = useState('');
-  const [amount, setAmount] = useState('');
-  const [transactionHash, setTransactionHash] = useState('');
-  const [error, setError] = useState('');
+function TokenTransfer() {
+    const [recipientAddress, setRecipientAddress] = useState("");
+    const [amount, setAmount] = useState("");
+    const [tokenAddress, setTokenAddress] = useState("");
 
-  const transferTokens = async () => {
-    try {
-      if (!window.ethereum) {
-        throw new Error('No crypto wallet found. Please install it.');
-      }
+    async function transferTokens() {
+        if (!window.ethereum) return;
 
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
 
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+            tokenAddress,
+            [
+                "function transfer(address to, uint amount) returns (bool)"
+            ],
+            signer
+        );
 
-      const erc20ABI = [
-        "function transfer(address to, uint amount) returns (bool)"
-      ];
-      const contract = new ethers.Contract(tokenAddress, erc20ABI, signer);
-
-      const amountInWei = ethers.parseUnits(amount, 18);
-      const transaction = await contract.transfer(recipientAddress, amountInWei);
-      const receipt = await transaction.wait();
-
-      setTransactionHash(receipt.transactionHash);
-      setError('');
-    } catch (error) {
-      console.error('Error transferring tokens:', error);
-      setError(error.message);
+        const amountInWei = ethers.utils.parseUnits(amount, 18);
+        const tx = await contract.transfer(recipientAddress, amountInWei);
+        await tx.wait();
+        alert("Transfer successful!");
     }
-  };
 
-  return (
-    <div>
-      <h2>Transfer Tokens</h2>
-      <input
-        type="text"
-        placeholder="Recipient Address"
-        value={recipientAddress}
-        onChange={(e) => setRecipientAddress(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Token Contract Address"
-        value={tokenAddress}
-        onChange={(e) => setTokenAddress(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Amount"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-      />
-      <button onClick={transferTokens}>Transfer</button>
-      {transactionHash && <p>Transaction Hash: {transactionHash}</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-    </div>
-  );
+    return (
+        <div>
+            <Typography variant="h6">Transfer Tokens</Typography>
+            <TextField
+                label="Token Address"
+                variant="outlined"
+                value={tokenAddress}
+                onChange={(e) => setTokenAddress(e.target.value)}
+                fullWidth
+                margin="normal"
+            />
+            <TextField
+                label="Recipient Address"
+                variant="outlined"
+                value={recipientAddress}
+                onChange={(e) => setRecipientAddress(e.target.value)}
+                fullWidth
+                margin="normal"
+            />
+            <TextField
+                label="Amount"
+                variant="outlined"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                fullWidth
+                margin="normal"
+            />
+            <Button variant="contained" color="primary" onClick={transferTokens}>
+                Transfer Tokens
+            </Button>
+        </div>
+    );
 }
 
-export default Transfer;
+export default TokenTransfer;

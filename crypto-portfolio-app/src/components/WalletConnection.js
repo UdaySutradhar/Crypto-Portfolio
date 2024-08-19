@@ -1,36 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import Web3 from 'web3';
+import React, { useState } from 'react';
+import { ethers } from 'ethers';
+import { Button, Typography } from '@mui/material';
 
-const WalletConnection = () => {
-    const [walletAddress, setWalletAddress] = useState('');
-    const [web3, setWeb3] = useState(null);
+function WalletConnect() {
+    const [walletAddress, setWalletAddress] = useState("");
 
-    useEffect(() => {
-        if (window.ethereum) {
-            const web3Instance = new Web3(window.ethereum);
-            setWeb3(web3Instance);
-        } else {
-            alert("Please install MetaMask!");
-        }
-    }, []);
-
-    const connectWallet = async () => {
-        if (web3) {
+    async function connectWallet() {
+        if (typeof window.ethereum !== 'undefined') {
             try {
-                const accounts = await web3.eth.requestAccounts();
-                setWalletAddress(accounts[0]);
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                if (accounts.length === 0) {
+                    alert("No accounts found. Please make sure you have an account in MetaMask.");
+                } else {
+                    setWalletAddress(accounts[0]);
+                }
             } catch (error) {
-                console.error("User denied wallet connection");
+                if (error.code === 4001) { // EIP-1193 userRejectedRequest error
+                    alert("Connection request was rejected by the user.");
+                } else {
+                    console.error("An unexpected error occurred:", error);
+                }
             }
+        } else {
+            alert("MetaMask is not installed. Please install it to use this app.");
         }
-    };
+    }
 
     return (
         <div>
-            <button onClick={connectWallet}>Connect Wallet</button>
-            {walletAddress && <p>Connected Address: {walletAddress}</p>}
+            {walletAddress ? (
+                <Typography variant="h6">Connected: {walletAddress}</Typography>
+            ) : (
+                <Button variant="contained" color="primary" onClick={connectWallet}>
+                    Connect Wallet
+                </Button>
+            )}
         </div>
     );
-};
+}
 
-export default WalletConnection;
+export default WalletConnect;
