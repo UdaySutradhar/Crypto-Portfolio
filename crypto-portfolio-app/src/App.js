@@ -1,25 +1,23 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Dashboard from './pages/Dashboard';
-import WatchList from './pages/WatchList';
-import History from './pages/History';
 import Allowance from './pages/Allowance';
 import Transfer from './pages/Transfer';
+import HistoricalData from './pages/HistoricalData';
 
 function App() {
-    return (
-        <Router>
-            <Navbar />
-            <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/watchlist" element={<WatchList />} />
-                <Route path="/history" element={<History />} />
-                <Route path="/allowance" element={<Allowance />} />
-                <Route path="/transfer" element={<Transfer />} />
-            </Routes>
-        </Router>
-    );
+  return (
+    <Router>
+      <div>
+        <Navbar />
+        <Routes>
+          <Route path="/allowance" element={<Allowance />} />
+          <Route path="/transfer" element={<Transfer />} />
+          <Route path="/historical" element={<HistoricalData />} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
 export default App;

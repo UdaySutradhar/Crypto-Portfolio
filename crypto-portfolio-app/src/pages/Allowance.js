@@ -1,75 +1,62 @@
 import React, { useState } from 'react';
 import { ethers } from 'ethers';
 
-const Allowance = () => {
-    const [ownerAddress, setOwnerAddress] = useState('');
-    const [spenderAddress, setSpenderAddress] = useState('');
-    const [tokenAddress, setTokenAddress] = useState('');
-    const [allowance, setAllowance] = useState(null);
+function Allowance() {
+  const [ownerAddress, setOwnerAddress] = useState('');
+  const [spenderAddress, setSpenderAddress] = useState('');
+  const [tokenAddress, setTokenAddress] = useState('');
+  const [allowance, setAllowance] = useState(null);
+  const [error, setError] = useState('');
 
-    const checkAllowance = async () => {
-        try {
-            // Set up a provider
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const checkAllowance = async () => {
+    try {
+      if (!window.ethereum) {
+        throw new Error('No crypto wallet found. Please install it.');
+      }
 
-            // Set up the ERC-20 contract
-            const erc20ABI = [
-                // Allowance function
-                "function allowance(address owner, address spender) view returns (uint256)"
-            ];
-            const contract = new ethers.Contract(tokenAddress, erc20ABI, provider);
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
 
-            // Get the allowance
-            const allowance = await contract.allowance(ownerAddress, spenderAddress);
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const erc20ABI = [
+        "function allowance(address owner, address spender) view returns (uint256)"
+      ];
+      const contract = new ethers.Contract(tokenAddress, erc20ABI, provider);
 
-            // Convert the result to a readable format (e.g., ether)
-            const allowanceFormatted = ethers.utils.formatUnits(allowance, 18); // Assuming token has 18 decimals
-            setAllowance(allowanceFormatted);
-        } catch (error) {
-            console.error('Error checking allowance:', error);
-        }
-    };
+      const allowance = await contract.allowance(ownerAddress, spenderAddress);
+      setAllowance(ethers.formatUnits(allowance, 18));
+      setError('');
+    } catch (error) {
+      console.error('Error checking allowance:', error);
+      setError(error.message);
+    }
+  };
 
-    return (
-        <div>
-            <h2>Check Token Allowance</h2>
-            <label>
-                Owner Address:
-                <input 
-                    type="text" 
-                    value={ownerAddress} 
-                    onChange={(e) => setOwnerAddress(e.target.value)} 
-                />
-            </label>
-            <br />
-            <label>
-                Spender Address:
-                <input 
-                    type="text" 
-                    value={spenderAddress} 
-                    onChange={(e) => setSpenderAddress(e.target.value)} 
-                />
-            </label>
-            <br />
-            <label>
-                Token Contract Address:
-                <input 
-                    type="text" 
-                    value={tokenAddress} 
-                    onChange={(e) => setTokenAddress(e.target.value)} 
-                />
-            </label>
-            <br />
-            <button onClick={checkAllowance}>Check Allowance</button>
-
-            {allowance !== null && (
-                <div>
-                    <h3>Allowance:</h3>
-                    <p>{allowance} tokens</p>
-                </div>
-            )}
-        </div>
-    );
-};
+  return (
+    <div>
+      <h2>Check Allowance</h2>
+      <input
+        type="text"
+        placeholder="Owner Address"
+        value={ownerAddress}
+        onChange={(e) => setOwnerAddress(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Spender Address"
+        value={spenderAddress}
+        onChange={(e) => setSpenderAddress(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Token Contract Address"
+        value={tokenAddress}
+        onChange={(e) => setTokenAddress(e.target.value)}
+      />
+      <button onClick={checkAllowance}>Check Allowance</button>
+      {allowance && <p>Allowance: {allowance} tokens</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+    </div>
+  );
+}
 
 export default Allowance;
