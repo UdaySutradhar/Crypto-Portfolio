@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
-import Header from './components/Header';
-import WatchList from './components/WatchList';
-import HistoricalData from './components/HistoricalData';
-import AllowanceChecker from './components/AllowanceChecker';
-import TokenTransfer from './components/TokenTransfer';
-import './styles.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Dashboard from './pages/Dashboard';
+import WatchList from './pages/WatchList';
+import History from './pages/History';
+import Allowance from './pages/Allowance';
+import Transfer from './pages/Transfer';
 
-const App = () => {
-  const [walletAddress, setWalletAddress] = useState('');
-
-  return (
-    <div className="App">
-      <Header setWalletAddress={setWalletAddress} />
-      <WatchList walletAddress={walletAddress} />
-      <HistoricalData walletAddress={walletAddress} />
-      <AllowanceChecker walletAddress={walletAddress} />
-      <TokenTransfer walletAddress={walletAddress} />
-    </div>
-  );
-};
+function App() {
+    return (
+        <Router>
+            <Navbar />
+            <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/watchlist" element={<WatchList />} />
+                <Route path="/history" element={<History />} />
+                <Route path="/allowance" element={<Allowance />} />
+                <Route path="/transfer" element={<Transfer />} />
+            </Routes>
+        </Router>
+    );
+}
 
 export default App;
